@@ -1,4 +1,5 @@
 node_modules
 names/ag*.txt
-templates/ag*.txt
+templates/ag*.pdf
 output/
+fonts/

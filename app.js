@@ -1,6 +1,7 @@
 "use strict";
 
 const fs = require("fs");
+const path = require('path');
 const HummusRecipe = require("hummus-recipe");
 const argv = require("minimist")(process.argv.slice(2));
 const readline = require("readline");
@@ -9,12 +10,13 @@ const options = {
   names_dir: "names/",
   template_dir: "templates/",
   output_dir: "output/",
+  fonts_dir: path.join(__dirname, 'fonts'),
   text: {
-    x: 419,
+    x: 417.6,
     y: 310,
-    size: 30,
-    color: "066099",
-    font: "Helvatica"
+    size: 60,
+    color: "000000",
+    font: "Bradley_Hand_ITC_TT_Bold"
   }
 };
 
@@ -28,7 +30,7 @@ function getNames(list) {
       let line_no = 0;
 
       // event is emitted after each line
-      rl.on("line", function(line) {
+      rl.on("line", function (line) {
         line_no++;
         names.push(
           line
@@ -38,7 +40,7 @@ function getNames(list) {
             .join(" ")
         );
       });
-      rl.on("close", function(line) {
+      rl.on("close", function (line) {
         x(names);
       });
     }, 2000);
@@ -54,16 +56,17 @@ async function makeNames(list) {
   result.forEach(element => {
     let pdfDoc = new HummusRecipe(
       options.template_dir + list + ".pdf",
-      options.output_dir + list + "/" + element + ".pdf"
-    );
+      options.output_dir + list + "/" + element + ".pdf", {
+      fontSrcPath: options.fonts_dir // for example, there is a font './fonts/msyh.ttf'
+    });
     pdfDoc
       // edit 1st page
       .editPage(1)
       .text(element, options.text.x, options.text.y, {
+        font: options.text.font,
         color: options.text.color,
         fontSize: options.text.size,
-        bold: true,
-        font: options.text.font,
+        // bold: true,
         align: "center center"
       })
       .endPage()
@@ -83,9 +86,11 @@ if (!argv["l"]) {
   let group = argv["l"];
   if (!fs.existsSync(options.output_dir)) {
     fs.mkdirSync(options.output_dir);
-    if (!fs.existsSync(options.output_dir + group)) {
-      fs.mkdirSync(options.output_dir + group);
-    }
+  }
+  if (!fs.existsSync(options.output_dir + group)) {
+    fs.mkdirSync(options.output_dir + group);
   }
   makeNames(group);
 }
+
+// font: Brandley Hand
