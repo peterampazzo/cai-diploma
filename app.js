@@ -68,6 +68,12 @@ async function makeNames(list) {
         fontSize: options.text.size,
         // bold: true,
         align: "center center"
+      }).text("17/11/2019", 265, 490, {
+        font: options.text.font,
+        color: options.text.color,
+        fontSize: 20
+        // bold: true,
+        //align: "center center"
       })
       .endPage()
       // end and save
